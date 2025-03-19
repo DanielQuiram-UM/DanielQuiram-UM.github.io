@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - NoteApp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .login-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .login-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="login-container box">
+          <h2 class="title is-4 login-title">Login</h2>
+          <form>
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="email"
+                  placeholder="Enter email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="password"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <button class="button is-primary is-fullwidth">Login</button>
+            </div>
+          </form>
+          <p class="has-text-centered">
+            Don't have an account? <a href="singUp.html">Sign up</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up - NoteApp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .signup-container {
+        max-width: 400px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .signup-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="signup-container box">
+          <h2 class="title is-4 signup-title">Sign Up</h2>
+          <form>
+            <div class="field">
+              <label class="label">Username</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Enter username"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="email"
+                  placeholder="Enter email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="password"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <button class="button is-primary is-fullwidth">Sign Up</button>
+            </div>
+          </form>
+          <p class="has-text-centered">
+            Already have an account? <a href="logIn.html">Log in</a>
+          </p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

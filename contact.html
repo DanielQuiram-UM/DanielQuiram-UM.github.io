@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact - NoteApp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .contact-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+      .contact-title {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <div class="contact-container box">
+          <h2 class="title is-4 contact-title">Contact Us</h2>
+          <form>
+            <div class="field">
+              <label class="label">Name</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="text"
+                  placeholder="Enter your name"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Email</label>
+              <div class="control">
+                <input
+                  class="input"
+                  type="email"
+                  placeholder="Enter your email"
+                  required
+                />
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Message</label>
+              <div class="control">
+                <textarea
+                  class="textarea"
+                  placeholder="Your message"
+                  required
+                ></textarea>
+              </div>
+            </div>
+            <div class="field">
+              <button class="button is-primary is-fullwidth">
+                Send Message
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

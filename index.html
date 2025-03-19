@@ -3,12 +3,134 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Project</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>NoteApp</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .card-container {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 50px;
+      }
+
+      .card {
+        cursor: move;
+        width: 300px;
+        margin: 10px;
+      }
+
+      .drop-zone {
+        height: 250px;
+        width: 100%;
+        background-color: #f0f0f0;
+        border: 2px dashed #00d1b2;
+        text-align: center;
+        line-height: 250px;
+        margin-top: 50px;
+      }
+
+      .over {
+        background-color: #e4f7f4;
+      }
+    </style>
   </head>
   <body>
-    <h1>Welcome to My Project</h1>
-    <button onclick="showMessage()">Click Me</button>
-    <script src="script.js"></script>
+    <!-- Navbar -->
+    <nav class="navbar is-primary">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+          <img src="icon.png" alt="Logo" />
+        </a>
+        <!-- Hamburger Icon for Mobile Devices -->
+        <a
+          role="button"
+          class="navbar-burger burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarBasicExample"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+
+      <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="#">Home</a>
+          <a class="navbar-item" href="#">About</a>
+          <a class="navbar-item" href="#">Services</a>
+          <a class="navbar-item" href="contact.html">Contact</a>
+        </div>
+
+        <div class="navbar-end">
+          <div class="navbar-item">
+            <div class="buttons">
+              <a class="button is-light" href="singUp.html"> Sign up </a>
+              <a class="button is-primary" href="logIn.html"> Log in </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="columns">
+      <div class="column">Neuen Note User Bereich anlegen</div>
+      <div class="column">Aus bisherigen Bereichen auswaehlen</div>
+      <div class="column">Note User Folder bearbeiten</div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <a href="newArea.html">
+          <button class="button is-link">Neuer Bereich</button>
+        </a>
+      </div>
+      <div class="column">
+        <a href="choseArea.html">
+          <button class="button is-link">Bereich auswaehlen</button>
+        </a>
+      </div>
+      <div class="column">
+        <a href="modifyArea.html">
+          <button class="button is-link">Bereich bearbeiten</button>
+        </a>
+      </div>
+    </div>
+
+    <!--Draggable card section-->
+    <!-- Draggable Card -->
+    <div class="columns">
+      <div class="column">
+        <div
+          id="draggableCard"
+          class="card"
+          draggable="true"
+          ondragstart="drag(event)"
+        >
+          <div class="card-content">
+            <p class="title">Draggable Card</p>
+            <p class="subtitle">This is a draggable card.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drop Zone -->
+    <div
+      id="dropZone"
+      class="drop-zone"
+      ondragover="allowDrop(event)"
+      ondrop="drop(event)"
+    >
+      Drop Here
+    </div>
+
+    <footer class="footer has-background-link">
+      <div class="content has-text-centered">
+        <p class="has-text-white">Example footer</p>
+      </div>
+    </footer>
   </body>
 </html>
