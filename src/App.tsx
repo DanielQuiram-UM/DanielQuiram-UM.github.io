@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Navbar from "./components/Navbar";
+import Menubar from "./components/Menubar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Workspace from "./components/Workspace";
 
-function App() {
+export default function App() {
+  const [canvasName, setCanvasName] = useState(""); // Store the canvas name
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="flex flex-col h-screen">
+        {/* Fixed Navbar */}
+        <Navbar />
+
+        {/* Main content area */}
+        <div className="flex flex-1">
+          {/* Menubar is always open */}
+          <Menubar setCanvasName={setCanvasName} />
+
+          {/* Main content area to show the workspace */}
+          <div className="flex-1 p-6 bg-gray-100 ml-0">
+            <Routes>
+              <Route
+                path="/workspace/:canvasId"
+                element={<Workspace canvasName={canvasName} />}
+              />
+              <Route
+                path="/"
+                element={
+                  canvasName ? (
+                    <div>{`Canvas: ${canvasName}`}</div>
+                  ) : (
+                    <div>Select a Canvas</div>
+                  )
+                }
+              />
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </BrowserRouter>
   );
 }
-
-export default App;
