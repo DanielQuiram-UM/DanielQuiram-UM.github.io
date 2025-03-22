@@ -1,13 +1,24 @@
+// src/components/Workspace.tsx
+
 import { useState, useRef, useEffect } from "react";
+import { v4 as uuidv4 } from "uuid"; // Import uuid for unique note ids
 
 interface WorkspaceProps {
   canvasName: string;
+  notes: Array<{ id: string; x: number; y: number }>; // Array to hold notes' positions
+  addNote: (x: number, y: number) => void; // Function to add new note
+  updateNotePosition: (id: string, x: number, y: number) => void; // Function to update note position
 }
 
-export default function Workspace({ canvasName }: WorkspaceProps) {
+export default function Workspace({
+  canvasName,
+  notes,
+  addNote,
+  updateNotePosition,
+}: WorkspaceProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [draggingNoteId, setDraggingNoteId] = useState<string | null>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -15,23 +26,25 @@ export default function Workspace({ canvasName }: WorkspaceProps) {
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging) {
+    if (isDragging && draggingNoteId) {
       const deltaX = e.movementX;
       const deltaY = e.movementY;
-      setOffset((prev) => ({
-        x: prev.x + deltaX,
-        y: prev.y + deltaY,
-      }));
+      const note = notes.find((note) => note.id === draggingNoteId);
+      if (note) {
+        updateNotePosition(draggingNoteId, note.x + deltaX, note.y + deltaY);
+      }
     }
     setMousePosition({ x: e.clientX, y: e.clientY });
   };
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    setDraggingNoteId(null);
   };
 
   const handleMouseLeave = () => {
     setIsDragging(false);
+    setDraggingNoteId(null);
   };
 
   const drawGrid = (ctx: CanvasRenderingContext2D) => {
@@ -61,7 +74,6 @@ export default function Workspace({ canvasName }: WorkspaceProps) {
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.save();
-      ctx.translate(offset.x, offset.y);
       drawGrid(ctx);
       ctx.restore();
     }
@@ -75,7 +87,7 @@ export default function Workspace({ canvasName }: WorkspaceProps) {
         renderCanvas(canvas);
       }
     }
-  }, [offset]);
+  }, []);
 
   return (
     <div className="flex-1 p-6 bg-gray-100 relative">
@@ -94,9 +106,22 @@ export default function Workspace({ canvasName }: WorkspaceProps) {
           height={1000}
           className="absolute top-0 left-0"
         />
-        <div className="absolute bottom-0 right-0 p-2 bg-gray-900 text-white rounded">
-          {`Mouse Position: (${mousePosition.x}, ${mousePosition.y})`}
-        </div>
+
+        {/* Render Notes */}
+        {notes.map(({ id, x, y }) => (
+          <div
+            key={id}
+            className="absolute bg-yellow-200 p-4 rounded shadow-md"
+            style={{ top: y, left: x, zIndex: 10 }} // Ensure notes are above canvas
+            onMouseDown={(e) => {
+              e.stopPropagation(); // Prevent canvas drag
+              setDraggingNoteId(id);
+            }}
+          >
+            <h4 className="font-semibold text-lg">Note {id}</h4>
+            <textarea className="w-full p-2 border rounded" />
+          </div>
+        ))}
       </div>
     </div>
   );
