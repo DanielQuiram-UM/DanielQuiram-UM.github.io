@@ -40,7 +40,7 @@ export default function App() {
           <Menubar setCanvasName={setCanvasName} addNote={addNote} />
 
           {/* Main content area to show the workspace */}
-          <div className="flex-1 p-6 bg-gray-100 ml-64">
+          <div className="flex-1 p-0 bg-gray-100 ml-64 overflow-hidden">
             <Routes>
               <Route
                 path="/workspace/:canvasId"

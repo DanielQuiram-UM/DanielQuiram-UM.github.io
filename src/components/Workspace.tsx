@@ -1,13 +1,11 @@
-// src/components/Workspace.tsx
-
-import { useState, useRef, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid"; // Import uuid for unique note ids
+import { useState, useEffect, useRef } from "react";
+import Note from "./Note"; // Assuming you have the Note component
 
 interface WorkspaceProps {
   canvasName: string;
-  notes: Array<{ id: string; x: number; y: number }>; // Array to hold notes' positions
-  addNote: (x: number, y: number) => void; // Function to add new note
-  updateNotePosition: (id: string, x: number, y: number) => void; // Function to update note position
+  notes: { id: string; x: number; y: number }[];
+  addNote: (x: number, y: number) => void;
+  updateNotePosition: (id: string, x: number, y: number) => void;
 }
 
 export default function Workspace({
@@ -17,36 +15,41 @@ export default function Workspace({
   updateNotePosition,
 }: WorkspaceProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const workspaceRef = useRef<HTMLDivElement>(null);
+
   const [isDragging, setIsDragging] = useState(false);
-  const [draggingNoteId, setDraggingNoteId] = useState<string | null>(null);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  // Track the mouse position within the workspace
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    setMousePosition({
+      x: e.clientX - (workspaceRef.current?.getBoundingClientRect().left ?? 0),
+      y: e.clientY - (workspaceRef.current?.getBoundingClientRect().top ?? 0),
+    });
+    if (isDragging) {
+      const deltaX = e.movementX;
+      const deltaY = e.movementY;
+      setOffset((prev) => ({
+        x: prev.x + deltaX,
+        y: prev.y + deltaY,
+      }));
+    }
+  };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     setIsDragging(true);
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (isDragging && draggingNoteId) {
-      const deltaX = e.movementX;
-      const deltaY = e.movementY;
-      const note = notes.find((note) => note.id === draggingNoteId);
-      if (note) {
-        updateNotePosition(draggingNoteId, note.x + deltaX, note.y + deltaY);
-      }
-    }
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
-
   const handleMouseUp = () => {
     setIsDragging(false);
-    setDraggingNoteId(null);
   };
 
   const handleMouseLeave = () => {
     setIsDragging(false);
-    setDraggingNoteId(null);
   };
 
+  // Grid Drawing Logic
   const drawGrid = (ctx: CanvasRenderingContext2D) => {
     const width = ctx.canvas.width;
     const height = ctx.canvas.height;
@@ -73,9 +76,7 @@ export default function Workspace({
     const ctx = canvas.getContext("2d");
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
       drawGrid(ctx);
-      ctx.restore();
     }
   };
 
@@ -87,41 +88,40 @@ export default function Workspace({
         renderCanvas(canvas);
       }
     }
-  }, []);
+  }, [offset]);
 
   return (
-    <div className="flex-1 p-6 bg-gray-100 relative">
+    <div
+      ref={workspaceRef}
+      className="flex-1 p-0 bg-gray-100 relative"
+      onMouseMove={handleMouseMove}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseLeave={handleMouseLeave}
+    >
       <h1 className="text-2xl font-bold mb-4">Workspace: {canvasName}</h1>
-      <div
-        className="relative"
-        style={{ width: "100%", height: "400px" }}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
-      >
+      <div className="relative" style={{ width: "100%", height: "600px" }}>
         <canvas
           ref={canvasRef}
           width={1000}
           height={1000}
           className="absolute top-0 left-0"
         />
-
         {/* Render Notes */}
         {notes.map(({ id, x, y }) => (
-          <div
+          <Note
             key={id}
-            className="absolute bg-yellow-200 p-4 rounded shadow-md"
-            style={{ top: y, left: x, zIndex: 10 }} // Ensure notes are above canvas
-            onMouseDown={(e) => {
-              e.stopPropagation(); // Prevent canvas drag
-              setDraggingNoteId(id);
-            }}
-          >
-            <h4 className="font-semibold text-lg">Note {id}</h4>
-            <textarea className="w-full p-2 border rounded" />
-          </div>
+            noteId={id}
+            x={x + offset.x} // Apply offset to keep note's relative position on the canvas
+            y={y + offset.y} // Apply offset to keep note's relative position on the canvas
+            updateNotePosition={updateNotePosition}
+          />
         ))}
+      </div>
+
+      {/* Mouse Position Display */}
+      <div className="absolute bottom-0 right-0 p-2 bg-gray-900 text-white rounded">
+        {`Mouse Position: (${mousePosition.x}, ${mousePosition.y})`}
       </div>
     </div>
   );
